@@ -1,0 +1,10 @@
+{
+  "name": "AgriNova AI",
+  "description": "An AI-powered agricultural assistant for Indian farmers providing crop advice, pest control, soil health, weather, and government scheme guidance using text, voice, and image analysis.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

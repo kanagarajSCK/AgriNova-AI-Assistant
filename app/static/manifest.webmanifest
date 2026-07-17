@@ -1,0 +1,26 @@
+{
+  "name": "AgriNova AI - AI Agriculture Assistant",
+  "short_name": "AgriNova AI",
+  "description": "AI-powered agriculture assistant for Indian farmers. Get expert advice on crops, pest control, soil health, weather insights, government schemes, and crop disease diagnosis using text, voice, and image analysis.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#16a34a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/static/images/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": [
+    "agriculture",
+    "education",
+    "utilities"
+  ],
+  "lang": "en-IN",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

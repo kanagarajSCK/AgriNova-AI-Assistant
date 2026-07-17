@@ -1,0 +1,17 @@
+[project]
+name = "agrinova-ai"
+version = "2.0.0"
+description = "AgriNova AI - AI-powered agriculture assistant for Indian farmers with text, voice, image analysis, and conversation memory."
+requires-python = ">=3.11"
+
+dependencies = [
+    "flask>=3.1.3",
+    "langchain>=1.3.10",
+    "langchain-groq>=1.1.3",
+    "redis>=5.2.0",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-github-username/AgriNova-AI"

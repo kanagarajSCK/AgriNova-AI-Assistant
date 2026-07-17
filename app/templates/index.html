@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriNova AI - AI Agriculture Assistant for Indian Farmers</title>
+    <meta name="description" content="AgriNova AI is an AI-powered agriculture assistant for Indian farmers. Get crop recommendations, pest and disease diagnosis, soil health guidance, weather insights, and government scheme information using text, voice, and image analysis.">
+    <meta name="keywords" content="agriculture, farming, India, crops, pest control, soil health, AI assistant, chatbot, Kharif, Rabi, Zaid, wheat, rice, paddy, PM-KISAN, fertilizers, irrigation">
+    <meta name="author" content="Kanagaraj S">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0a1628">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://agrinova-ai.onrender.com/">
+
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://agrinova-ai.onrender.com/">
+    <meta property="og:title" content="AgriNova AI - AI Agriculture Assistant for Indian Farmers">
+    <meta property="og:description" content="AgriNova AI is an AI-powered agriculture assistant for Indian farmers. Get crop recommendations, pest and disease diagnosis, soil health guidance, weather insights, and government scheme information using text, voice, and image analysis.">
+    <meta property="og:image" content="https://agrinova-ai.onrender.com/static/images/og-image.png">
+    <meta property="og:site_name" content="AgriNova AI">
+    <meta property="og:locale" content="en_IN">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://agrinova-ai.onrender.com/">
+    <meta name="twitter:title" content="AgriNova AI - AI Agriculture Assistant">
+    <meta name="twitter:description" content="AgriNova AI is an AI-powered agriculture assistant for Indian farmers. Get crop recommendations, pest and disease diagnosis, soil health guidance, weather insights, and government scheme information using text, voice, and image analysis.">
+    <meta name="twitter:image" content="https://agrinova-ai.onrender.com/static/images/og-image.png">
+    <meta name="twitter:creator" content="@agrinova">
+
+    <!-- AI Crawlers -->
+    <meta name="llms-txt" content="/llms.txt">
+    <meta name="ai-content-declaration" content="human-reviewed">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AgriNova AI",
+        "alternateName": "AI Agriculture Assistant",
+        "url": "https://agrinova-ai.onrender.com",
+        "description": "AgriNova AI is an AI-powered agriculture assistant for Indian farmers. Get crop recommendations, pest and disease diagnosis, soil health guidance, weather insights, and government scheme information using text, voice, and image analysis.",
+        "applicationCategory": "AgricultureApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "INR"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Kanagaraj S",
+            "url": "https://www.linkedin.com/in/kanagaraj",
+            "sameAs": [
+                "https://github.com/kanagaraj",
+                "https://www.linkedin.com/in/kanagaraj"
+            ]
+        },
+        "inLanguage": ["en", "hi"],
+        "featureList": [
+            "AI Crop Disease Diagnosis",
+            "Voice Input & Output",
+            "Agricultural Advisory",
+            "Government Scheme Information",
+            "Image Analysis",
+            "Multilingual Support"
+        ],
+        "screenshot": "https://agrinova-ai.onrender.com/static/images/og-image.png"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is AgriNova AI?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "AgriNova AI is an AI-powered agriculture assistant that helps Indian farmers with crop advice, pest control, soil health, weather information, and government schemes."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can AgriNova AI diagnose crop diseases from photos?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, you can upload a photo of your crops and AgriNova AI will analyze it using AI vision to identify diseases, pests, and nutrient deficiencies."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is AgriNova AI free to use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, AgriNova AI is completely free to use. It provides AI-powered agricultural advisory at no cost."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+</head>
+<body>
+
+    <!-- ========== GLOBAL APP CONTAINER ========== -->
+    <div class="app-container">
+        
+        <!-- ========== SIDEBAR PANEL ========== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a class="sidebar-brand" href="/">
+                    <span class="brand-icon"><i class="bi bi-flower2"></i></span>
+                    <span>AgriNova AI</span>
+                </a>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn" title="Close sidebar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            
+            <button class="new-chat-btn" id="newChatBtn">
+                <i class="bi bi-plus-lg"></i> New Chat
+            </button>
+            
+            <div class="sidebar-scroll">
+                <div class="sidebar-section-title">CHATS HISTORY</div>
+                <div class="chat-history-list" id="chatHistoryList">
+                    <!-- Dynamic chat history items will render here -->
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <!-- Indian Farmer Info Header -->
+                <div class="farmer-profile">
+                    <div class="farmer-avatar-glow">
+                        <div class="farmer-avatar-inner">
+                            <span class="wheat-ear wheat-left">🌾</span>
+                            <div class="avatar-robot-wrap">
+                                <svg width="34" height="34" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <!-- Wood Head Gradient -->
+                                        <radialGradient id="woodGrad" cx="50%" cy="40%" r="50%">
+                                            <stop offset="0%" stop-color="#E5A65E" />
+                                            <stop offset="100%" stop-color="#A06932" />
+                                        </radialGradient>
+                                        <!-- Metal Silver Gradient -->
+                                        <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#E2E8F0" />
+                                            <stop offset="50%" stop-color="#94A3B8" />
+                                            <stop offset="100%" stop-color="#475569" />
+                                        </linearGradient>
+                                        <!-- Blue Eyes Gradient -->
+                                        <radialGradient id="blueEye" cx="50%" cy="50%" r="50%">
+                                            <stop offset="0%" stop-color="#38BDF8" />
+                                            <stop offset="70%" stop-color="#0284C7" />
+                                            <stop offset="100%" stop-color="#0369A1" />
+                                        </radialGradient>
+                                        <!-- Gold Antenna/Accent Gradient -->
+                                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#FDE047" />
+                                            <stop offset="100%" stop-color="#CA8A04" />
+                                        </linearGradient>
+                                    </defs>
+                                    
+                                    <!-- Neck -->
+                                    <rect x="14.5" y="17.5" width="3" height="3" fill="url(#metalGrad)" rx="0.5" />
+                                    
+                                    <!-- Head Structure -->
+                                    <rect x="6" y="4" width="20" height="14" rx="4" fill="url(#woodGrad)" stroke="#5C3D1E" stroke-width="0.75" />
+                                    
+                                    <!-- Metallic Top Band / Panel -->
+                                    <path d="M 6 8 A 4 4 0 0 1 10 4 L 22 4 A 4 4 0 0 1 26 8 L 26 9 L 6 9 Z" fill="url(#metalGrad)" opacity="0.9" />
+                                    <!-- Center head light/gem representing Ashoka chakra color/glow -->
+                                    <circle cx="16" cy="6.5" r="1.5" fill="#38BDF8" stroke="#0284C7" stroke-width="0.5" />
+                                    
+                                    <!-- Eyes Plate / Visor -->
+                                    <rect x="8" y="8.5" width="16" height="6.5" rx="2" fill="#0F172A" />
+                                    
+                                    <!-- Left Eye -->
+                                    <circle cx="12" cy="11.7" r="2.2" fill="url(#blueEye)" />
+                                    <circle cx="11.2" cy="10.9" r="0.6" fill="#FFFFFF" />
+                                    
+                                    <!-- Right Eye -->
+                                    <circle cx="20" cy="11.7" r="2.2" fill="url(#blueEye)" />
+                                    <circle cx="19.2" cy="10.9" r="0.6" fill="#FFFFFF" />
+                                    
+                                    <!-- Friendly Smile on Wood -->
+                                    <path d="M 13 15.5 Q 16 17.5 19 15.5" stroke="#5C3D1E" stroke-width="1" fill="none" stroke-linecap="round" />
+                                    
+                                    <!-- Left Ear Bolt -->
+                                    <rect x="4.5" y="9" width="1.5" height="4" rx="0.5" fill="url(#metalGrad)" />
+                                    <!-- Right Ear Bolt -->
+                                    <rect x="26" y="9" width="1.5" height="4" rx="0.5" fill="url(#metalGrad)" />
+                                    
+                                    <!-- Left Antenna -->
+                                    <line x1="9" y1="4" x2="7" y2="1.5" stroke="url(#metalGrad)" stroke-width="1" />
+                                    <circle cx="7" cy="1.5" r="1" fill="url(#goldGrad)" />
+                                    
+                                    <!-- Right Antenna -->
+                                    <line x1="23" y1="4" x2="25" y2="1.5" stroke="url(#metalGrad)" stroke-width="1" />
+                                    <circle cx="25" cy="1.5" r="1" fill="url(#goldGrad)" />
+                                    
+                                    <!-- Tricolor Chestplate (Saffron, White, Green) -->
+                                    <g>
+                                        <!-- Saffron Stripe -->
+                                        <path d="M 8 20.5 L 24 20.5 C 24.8 20.5 25 21 25 21.5 L 25 23.5 L 7 23.5 L 7 21.5 C 7 21 7.2 20.5 8 20.5 Z" fill="#FF9933" />
+                                        <!-- White Stripe -->
+                                        <rect x="7" y="23.5" width="18" height="3" fill="#FFFFFF" />
+                                        <!-- Green Stripe with rounded bottom corners -->
+                                        <path d="M 7 26.5 L 25 26.5 L 25 29 C 25 30 24 31 22 31 L 10 31 C 8 31 7 30 7 29 Z" fill="#128807" />
+                                        <!-- Ashoka Chakra on White Stripe -->
+                                        <circle cx="16" cy="25" r="1.1" fill="none" stroke="#000080" stroke-width="0.3" />
+                                        <!-- Spokes of Ashoka Chakra -->
+                                        <line x1="16" y1="23.9" x2="16" y2="26.1" stroke="#000080" stroke-width="0.25" />
+                                        <line x1="14.9" y1="25" x2="17.1" y2="25" stroke="#000080" stroke-width="0.25" />
+                                        <!-- Border trim around chestplate for premium look -->
+                                        <path d="M 8 20.5 L 24 20.5 C 24.8 20.5 25 21 25 21.5 L 25 29 C 25 30 24 31 22 31 L 10 31 C 8 31 7 30 7 29 L 7 21.5 C 7 21 7.2 20.5 8 20.5 Z" fill="none" stroke="url(#metalGrad)" stroke-width="0.75" />
+                                    </g>
+                                </svg>
+                            </div>
+                            <span class="wheat-ear wheat-right">🌾</span>
+                        </div>
+                    </div>
+                    <div class="farmer-details">
+                        <div class="farmer-title">Farmer Assistant</div>
+                        <div class="farmer-status-label">
+                            <span class="status-dot-active"></span> Online
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Quick Action Buttons -->
+                <div class="footer-actions">
+                    <button class="footer-action-btn" id="themeToggle" title="Toggle theme">
+                        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                        <span>Theme</span>
+                    </button>
+                    <button class="footer-action-btn" id="sidebarClearBtn" title="Reset all chats">
+                        <i class="bi bi-trash3"></i>
+                        <span>Reset All</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ========== MAIN WORKSPACE ========== -->
+        <div class="chat-workspace">
+            
+            <!-- ========== TOP NAVBAR ========== -->
+            <header class="app-header">
+                <div class="header-left-wrap">
+                    <button class="menu-toggle-btn" id="menuToggleBtn" title="Open menu">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h1 class="header-title-main">AgriNova AI Assistant</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="lang-select-container">
+                        <i class="bi bi-translate lang-select-icon"></i>
+                        <select class="lang-select-elem" id="langSelectBtn" title="Select Advisory Language">
+                            <option value="auto">Auto Detect</option>
+                            <option value="ta">Tamil (தமிழ்)</option>
+                            <option value="hi">Hindi (हिन्दी)</option>
+                            <option value="te">Telugu (తెలుగు)</option>
+                            <option value="kn">Kannada (ಕನ್ನಡ)</option>
+                            <option value="ml">Malayalam (മലയാളം)</option>
+                            <option value="en">English</option>
+                        </select>
+                        <i class="bi bi-chevron-down lang-select-arrow"></i>
+                    </div>
+                    <button class="header-action-btn" id="voiceToggleBtn" title="Toggle Voice Output">
+                        <i class="bi bi-volume-mute-fill" id="headerVoiceIcon"></i>
+                        <span id="headerVoiceText">Voice: Off</span>
+                    </button>
+                    <button class="header-action-btn" id="headerNewChatBtn" title="New Chat">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>New Chat</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ========== CHAT MAIN CARD ========== -->
+            <div class="chat-card">
+
+                <!-- Messages -->
+                <div class="messages" id="chatMessages"></div>
+
+                <!-- Typing -->
+                <div class="typing" id="typingIndicator">
+                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                    <span class="typing-label">Thinking...</span>
+                </div>
+
+                <!-- Floating Image Preview -->
+                <div class="image-preview" id="imagePreview">
+                    <div class="preview-img-container">
+                        <img id="previewImg" src="" alt="Preview">
+                        <button class="remove-image" id="removeImage" title="Remove image"><i class="bi bi-x-lg"></i></button>
+                    </div>
+                    <span class="preview-label">Image attached</span>
+                </div>
+
+                <!-- Input Panel -->
+                <div class="input-panel">
+                    <div class="input-bar">
+                        <button class="icon-btn" id="imageBtn" title="Upload image">
+                            <i class="bi bi-image"></i>
+                        </button>
+                        <input type="file" id="imageInput" accept="image/*" class="d-none" title="Upload image" aria-label="Upload image">
+                        <button class="icon-btn mic" id="voiceBtn" title="Record voice">
+                            <i class="bi bi-mic"></i>
+                        </button>
+                        <form id="chatForm" class="input-row" autocomplete="off">
+                            <input type="text" class="chat-input" id="userInput"
+                                   placeholder="Ask about crops, pests, soil, or send a photo..." aria-label="Message">
+                            <button type="submit" class="send-btn" id="sendBtn" title="Send message">
+                                <i class="bi bi-arrow-up-short"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player -->
+    <audio id="audioPlayer" class="d-none"></audio>
+
+    <!-- Custom Confirm Modal -->
+    <div class="custom-confirm-modal" id="customConfirmModal">
+        <div class="confirm-modal-content">
+            <div class="confirm-modal-header">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <h4 id="confirmTitle">Confirm Action</h4>
+            </div>
+            <div class="confirm-modal-body" id="confirmMessage">
+                Are you sure you want to proceed?
+            </div>
+            <div class="confirm-modal-footer">
+                <button class="confirm-btn-cancel" id="confirmCancelBtn">Cancel</button>
+                <button class="confirm-btn-danger" id="confirmOkBtn">Yes, Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Input Modal (Rename) -->
+    <div class="custom-confirm-modal" id="customInputModal">
+        <div class="confirm-modal-content">
+            <div class="confirm-modal-header">
+                <i class="bi bi-pencil-square" style="color: var(--primary);"></i>
+                <h4 id="inputModalTitle">Rename Conversation</h4>
+            </div>
+            <div class="confirm-modal-body" style="margin-bottom: 18px;">
+                <input type="text" id="customModalInputField" placeholder="Enter new title..." maxlength="40">
+            </div>
+            <div class="confirm-modal-footer">
+                <button class="confirm-btn-cancel" id="inputModalCancelBtn">Cancel</button>
+                <button class="confirm-btn-danger" id="inputModalSaveBtn" style="background: var(--primary);">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
