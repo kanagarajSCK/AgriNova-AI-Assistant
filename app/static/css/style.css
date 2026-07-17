@@ -55,6 +55,8 @@
 }
 
 html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
     height: 100%;
     width: 100%;
     font-family: var(--font);
@@ -77,6 +79,8 @@ body::before {
     z-index: -1;
     pointer-events: none;
     transition: opacity 0.4s ease;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 [data-theme="light"] body::before {
@@ -100,9 +104,18 @@ body::before {
 }
 
 /* ========== GLOBAL APP CONTAINER LAYOUT ========== */
-.app-container {
+/* .app-container {
     display: flex;
     height: 100vh;
+    width: 100vw;
+    position: relative;
+    overflow: hidden;
+} */
+
+.app-container {
+    display: flex;
+    height: 100dvh;
+    min-height: 100dvh;
     width: 100vw;
     position: relative;
     overflow: hidden;
@@ -536,6 +549,7 @@ body::before {
     background: rgba(11, 21, 17, 0.3);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+    
 }
 
 [data-theme="light"] .app-header {
@@ -630,6 +644,8 @@ body::before {
     display: flex;
     flex-direction: column;
     gap: 28px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Chat Messages */
