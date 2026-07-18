@@ -13,7 +13,9 @@ from flask import Flask
 from dotenv import load_dotenv
 
 # Load environment variables BEFORE importing config
-load_dotenv()
+# Use absolute path to ensure .env is loaded correctly regardless of current working directory
+basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+load_dotenv(os.path.join(basedir, '.env'))
 
 from app.config import AppConfig
 

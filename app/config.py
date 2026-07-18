@@ -27,6 +27,7 @@ class AppConfig:
 
     # LLM (Groq)
     GROQ_API_KEY: Optional[str] = os.getenv('GROQ_API_KEY')
+    GEMINI_API_KEY: Optional[str] = os.getenv('GEMINI_API_KEY')
     LLM_MODEL: str = os.getenv('LLM_MODEL', 'openai/gpt-oss-120b')
     LLM_VISION_MODEL: str = os.getenv('LLM_VISION_MODEL', 'meta-llama/llama-4-scout-17b-16e-instruct')
     LLM_TEMPERATURE: float = float(os.getenv('LLM_TEMPERATURE', '0.3'))

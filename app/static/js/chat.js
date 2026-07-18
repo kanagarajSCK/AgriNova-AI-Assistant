@@ -546,7 +546,7 @@
                 contentType: false, 
                 processData: false, 
                 headers: ajaxHeaders,
-                timeout: 60000 
+                timeout: 180000
             })
             .done(function(r) { 
                 hideTyping(); 
