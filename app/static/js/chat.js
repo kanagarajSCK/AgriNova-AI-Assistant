@@ -62,7 +62,11 @@
             var val = $(this).val();
             if (val) {
                 activeLanguage = val;
-                localStorage.setItem('agrinova_language', val);
+                try {
+                    localStorage.setItem('agrinova_language', val);
+                } catch (e) {
+                    console.warn('[AgriNova Debug] localStorage setItem failed:', e);
+                }
                 showToast('Language set to ' + $(this).find('option:selected').text().trim() + '.');
             }
         });
@@ -85,7 +89,11 @@
         // Voice toggle action in the top header
         $('#voiceToggleBtn').on('click', function() {
             voiceEnabled = !voiceEnabled;
-            localStorage.setItem('agrinova_voice_enabled', voiceEnabled);
+            try {
+                localStorage.setItem('agrinova_voice_enabled', voiceEnabled);
+            } catch (e) {
+                console.warn('[AgriNova Debug] localStorage setItem failed:', e);
+            }
             updateVoiceButton();
             showToast('Voice output ' + (voiceEnabled ? 'enabled' : 'disabled') + '.');
             if (!voiceEnabled) {
@@ -137,8 +145,12 @@
             deleteSession(deleteId);
         });
 
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission();
+        try {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        } catch (e) {
+            console.warn('[AgriNova Debug] Notification permission request failed:', e);
         }
         $input.trigger('focus');
     });
@@ -217,11 +229,19 @@
         var isLight = document.documentElement.getAttribute('data-theme') === 'light';
         if (isLight) {
             document.documentElement.removeAttribute('data-theme');
-            localStorage.setItem('agri-bot-theme', 'dark');
+            try {
+                localStorage.setItem('agri-bot-theme', 'dark');
+            } catch (e) {
+                console.warn('[AgriNova Debug] localStorage setItem failed:', e);
+            }
             $themeIcon.removeClass('bi-sun-fill').addClass('bi-moon-stars-fill');
         } else {
             document.documentElement.setAttribute('data-theme', 'light');
-            localStorage.setItem('agri-bot-theme', 'light');
+            try {
+                localStorage.setItem('agri-bot-theme', 'light');
+            } catch (e) {
+                console.warn('[AgriNova Debug] localStorage setItem failed:', e);
+            }
             $themeIcon.removeClass('bi-moon-stars-fill').addClass('bi-sun-fill');
         }
     }
@@ -311,8 +331,12 @@
     }
 
     function saveChatsToStorage() {
-        localStorage.setItem('agrinova_chats', JSON.stringify(chats));
-        localStorage.setItem('agrinova_active_chat_id', activeChatId);
+        try {
+            localStorage.setItem('agrinova_chats', JSON.stringify(chats));
+            localStorage.setItem('agrinova_active_chat_id', activeChatId);
+        } catch (e) {
+            console.warn('[AgriNova Debug] localStorage save failed:', e);
+        }
     }
 
     function renderSidebarList() {
@@ -419,6 +443,7 @@
     function handleImageSelect(e) {
         var file = e.target.files[0];
         if (!file) return;
+        console.log('[AgriNova Debug] Image input change. File name:', file.name, 'Size:', file.size, 'MIME type:', file.type);
         if (file.size > 5 * 1024 * 1024) { showToast('Image too large. Max 5MB allowed.'); return; }
         if (!file.type.startsWith('image/')) { showToast('Please select an image file.'); return; }
         selectedImage = file;
@@ -430,8 +455,8 @@
         reader.readAsDataURL(file);
         $imageBtn.addClass('active');
     }
-
     function clearImage() {
+        console.log('[AgriNova Debug] Clearing selected image.');
         selectedImage = null;
         $imageInput.val('');
         $preview.removeClass('active');
@@ -508,17 +533,19 @@
         e.preventDefault();
         var text = $input.val().trim();
         var hasImage = selectedImage !== null;
-
+        console.log('[AgriNova Debug] Form submit / handleSend triggered. Text:', text, 'Has image:', hasImage);
         if (!text && !hasImage) return;
-        if (isProcessing) return;
+        if (isProcessing) {
+            console.warn('[AgriNova Debug] handleSend blocked because isProcessing is true.');
+            return;
+        }
         if (!text && hasImage) text = 'What do you see in this image? Please analyze from an agricultural perspective.';
-
+        console.log('[AgriNova Debug] Setting isProcessing = true. Disabling buttons.');
         isProcessing = true;
         $input.val('');
         $sendBtn.prop('disabled', true);
         $voiceBtn.prop('disabled', true);
         $imageBtn.prop('disabled', true);
-
         var imageToSend = selectedImage;
         var imgPreviewUrl = imageToSend ? $previewImg.attr('src') : null;
         
@@ -528,17 +555,15 @@
         
         clearImage();
         showTyping();
-
         var ajaxHeaders = {
             'X-Session-ID': activeChatId
         };
-
         if (hasImage) {
             var fd = new FormData();
             fd.append('image', imageToSend, imageToSend.name || 'image.jpg');
             fd.append('text', text);
             fd.append('language', activeLanguage);
-
+            console.log('[AgriNova Debug] API request start (Image Upload). Headers:', ajaxHeaders);
             $.ajax({ 
                 url: '/chat', 
                 type: 'POST', 
@@ -549,6 +574,7 @@
                 timeout: 180000
             })
             .done(function(r) { 
+                console.log('[AgriNova Debug] API request success (Image Upload). Response:', r);
                 hideTyping(); 
                 if (r.text) { 
                     appendMessageToUI(r.text, 'bot', r.cache, null, true, r.detected_lang); 
@@ -557,13 +583,18 @@
                 } 
             })
             .fail(function(x) { 
+                console.error('[AgriNova Debug] API request failure (Image Upload). Status:', x.status, 'Response:', x.responseText);
                 hideTyping(); 
                 var errMsg = getError(x);
                 appendMessageToUI(errMsg, 'bot', null, null, true); 
                 saveMessageToActiveSession(errMsg, 'bot', null, null);
             })
-            .always(done);
+            .always(function() {
+                console.log('[AgriNova Debug] API request finally block execution (Image Upload).');
+                done();
+            });
         } else {
+            console.log('[AgriNova Debug] API request start (Text Query). Headers:', ajaxHeaders);
             $.ajax({ 
                 url: '/chat', 
                 type: 'POST', 
@@ -572,6 +603,7 @@
                 timeout: 60000 
             })
             .done(function(r) { 
+                console.log('[AgriNova Debug] API request success (Text Query). Response:', r);
                 hideTyping(); 
                 if (r.text) { 
                     appendMessageToUI(r.text, 'bot', r.cache, null, true, r.detected_lang); 
@@ -580,15 +612,19 @@
                 } 
             })
             .fail(function(x) { 
+                console.error('[AgriNova Debug] API request failure (Text Query). Status:', x.status, 'Response:', x.responseText);
                 hideTyping(); 
                 var errMsg = getError(x);
                 appendMessageToUI(errMsg, 'bot', null, null, true); 
                 saveMessageToActiveSession(errMsg, 'bot', null, null);
             })
-            .always(done);
+            .always(function() {
+                console.log('[AgriNova Debug] API request finally block execution (Text Query).');
+                done();
+            });
         }
-
         function done() {
+            console.log('[AgriNova Debug] Setting isProcessing = false in done(). Re-enabling buttons.');
             isProcessing = false;
             $sendBtn.prop('disabled', false);
             $voiceBtn.prop('disabled', false);
@@ -596,16 +632,24 @@
             $input.trigger('focus');
         }
     }
-
     function playVoice(src) {
-        if (!src || !voiceEnabled) return;
-        $audio.attr('src', src);
-        $audio[0].play().catch(function() {});
-        if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification('AgriNova AI', { body: 'Voice response ready', icon: '/static/images/favicon.ico' });
+        try {
+            if (!src || !voiceEnabled) return;
+            $audio.attr('src', src);
+            $audio[0].play().catch(function(e) {
+                console.warn('[AgriNova Debug] Audio playback failed or was blocked:', e);
+            });
+            if ('Notification' in window && Notification.permission === 'granted') {
+                try {
+                    new Notification('AgriNova AI', { body: 'Voice response ready', icon: '/static/images/favicon.ico' });
+                } catch (e) {
+                    console.warn('[AgriNova Debug] Notification creation failed:', e);
+                }
+            }
+        } catch (err) {
+            console.error('[AgriNova Debug] playVoice failed:', err);
         }
     }
-
     function getError(xhr) {
         if (xhr.status === 400 && xhr.responseJSON) return xhr.responseJSON.error || 'Bad request.';
         if (xhr.status === 429) return 'Too many requests. Please wait.';
@@ -617,9 +661,11 @@
     function toggleRecording() { isRecording ? stopRecording() : startRecording(); }
  
     async function startRecording() {
+        console.log('[AgriNova Debug] Microphone start requested.');
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { showToast('Voice not supported.'); return; }
         try {
             var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            console.log('[AgriNova Debug] Microphone access granted. Stream tracks:', stream.getTracks());
             audioChunks = [];
             
             // Safe fallback mime types (webm, mp4, ogg, etc.)
@@ -638,34 +684,60 @@
                     break;
                 }
             }
-
             if (selectedMime) {
                 mediaRecorder = new MediaRecorder(stream, { mimeType: selectedMime });
             } else {
                 mediaRecorder = new MediaRecorder(stream);
             }
-
             mediaRecorder.ondataavailable = function(e) { if (e.data.size > 0) audioChunks.push(e.data); };
             mediaRecorder.onstop = function() { 
                 var recorderMime = mediaRecorder.mimeType || 'audio/webm';
+                console.log('[AgriNova Debug] MediaRecorder stopped. Sending audio blob of type:', recorderMime);
                 sendAudio(new Blob(audioChunks, { type: recorderMime })); 
                 stream.getTracks().forEach(function(t) { t.stop(); }); 
             };
-            mediaRecorder.onerror = function() { showToast('Mic error.'); stream.getTracks().forEach(function(t) { t.stop(); }); isRecording = false; $voiceBtn.removeClass('recording'); };
+            mediaRecorder.onerror = function() { 
+                console.error('[AgriNova Debug] MediaRecorder error.');
+                showToast('Mic error.'); 
+                stream.getTracks().forEach(function(t) { t.stop(); }); 
+                isRecording = false; 
+                $voiceBtn.removeClass('recording'); 
+            };
             mediaRecorder.start(250);
             isRecording = true;
             $voiceBtn.addClass('recording');
             showToast('Recording voice...');
-        } catch (err) { showToast('Mic access denied.'); }
+        } catch (err) { 
+            console.error('[AgriNova Debug] Microphone access denied:', err);
+            showToast('Mic access denied.'); 
+        }
     }
  
-    function stopRecording() { if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop(); isRecording = false; $voiceBtn.removeClass('recording'); }
+    function stopRecording() { 
+        console.log('[AgriNova Debug] Microphone stop requested.');
+        try {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                console.log('[AgriNova Debug] MediaRecorder stopped.');
+            }
+        } catch (err) {
+            console.error('[AgriNova Debug] Error stopping MediaRecorder:', err);
+        } finally {
+            isRecording = false;
+            $voiceBtn.removeClass('recording');
+        }
+    }
  
     function sendAudio(blob) {
-        if (isProcessing) return;
+        if (isProcessing) {
+            console.warn('[AgriNova Debug] sendAudio blocked because isProcessing is true.');
+            return;
+        }
+        console.log('[AgriNova Debug] sendAudio triggered. Setting isProcessing = true. Disabling buttons.');
         isProcessing = true; 
         $sendBtn.prop('disabled', true); 
         $voiceBtn.prop('disabled', true); 
+        $imageBtn.prop('disabled', true); // Disable image button during audio processing!
         showTyping();
  
         // Dynamically get correct file extension based on MIME type
@@ -676,7 +748,6 @@
             else if (blob.type.includes('ogg')) ext = 'ogg';
             else if (blob.type.includes('wav')) ext = 'wav';
         }
-
         var fd = new FormData(); 
         fd.append('audio', blob, 'recording.' + ext);
         fd.append('language', activeLanguage);
@@ -685,6 +756,7 @@
             'X-Session-ID': activeChatId
         };
  
+        console.log('[AgriNova Debug] API request start (Audio Query). Headers:', ajaxHeaders);
         $.ajax({ 
             url: '/chat', 
             type: 'POST', 
@@ -695,6 +767,7 @@
             timeout: 30000 
         })
         .done(function(r) { 
+            console.log('[AgriNova Debug] API request success (Audio Query). Response:', r);
             hideTyping(); 
             if (r.transcription) {
                 var userLangLabel = activeLanguage !== 'auto' ? $('#currentLangText').text().trim().split(' ')[0] : r.detected_lang;
@@ -708,7 +781,11 @@
                 // Automatically turn on voice output if it was toggled off, since user is interacting via voice
                 if (!voiceEnabled) {
                     voiceEnabled = true;
-                    localStorage.setItem('agrinova_voice_enabled', 'true');
+                    try {
+                        localStorage.setItem('agrinova_voice_enabled', 'true');
+                    } catch (e) {
+                        console.warn('[AgriNova Debug] localStorage setItem failed:', e);
+                    }
                     updateVoiceButton();
                     showToast('Voice output enabled.');
                 }
@@ -716,14 +793,17 @@
             } 
         })
         .fail(function(x) { 
+            console.error('[AgriNova Debug] API request failure (Audio Query). Status:', x.status, 'Response:', x.responseText);
             hideTyping(); 
             appendMessageToUI('Could not process audio query.', 'bot', null, null, true); 
             saveMessageToActiveSession('Could not process audio query.', 'bot', null, null);
         })
         .always(function() { 
+            console.log('[AgriNova Debug] API request finally block execution (Audio Query).');
             isProcessing = false; 
             $sendBtn.prop('disabled', false); 
             $voiceBtn.prop('disabled', false); 
+            $imageBtn.prop('disabled', false); // Re-enable image button!
             $input.trigger('focus'); 
         });
     }
