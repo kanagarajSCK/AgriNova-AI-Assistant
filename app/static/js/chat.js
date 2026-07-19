@@ -764,7 +764,7 @@
             contentType: false, 
             processData: false, 
             headers: ajaxHeaders,
-            timeout: 30000 
+            timeout: 50000 
         })
         .done(function(r) { 
             console.log('[AgriNova Debug] API request success (Audio Query). Response:', r);
