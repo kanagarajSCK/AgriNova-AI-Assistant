@@ -1,4 +1,4 @@
-"""Chat route blueprint.
+"""Chat route blueprints.
 
 Handles text, voice, and image chat interactions with session management,
 Redis-backed memory, and LLM processing.
