@@ -8,7 +8,7 @@ AgriNova AI is a highly performant, full-stack, voice-enabled agricultural assis
 
 Smallholder and regional farmers frequently struggle with access to timely agronomic support, crop disease identification, and literacy-locked text interfaces. AgriNova AI resolves these challenges by providing a comprehensive, inclusive portal where users can speak their queries naturally, upload photos of infected crops, and receive verbal, context-aware instructions in their native language.
 
----
+----
 
 ## 2. Features
 
