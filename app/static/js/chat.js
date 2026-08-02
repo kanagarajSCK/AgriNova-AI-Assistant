@@ -14,7 +14,7 @@
         + '</div></div>';
 
     // ── State variables ──
-    var chats = []; // Array of chat sessions
+    var chats = []; // Array of chat sessionss
     var activeChatId = ''; // Current active chat session ID
     var mediaRecorder = null;
     var audioChunks = [];
