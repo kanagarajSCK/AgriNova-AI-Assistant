@@ -11,5 +11,5 @@ redis>=5.2.0
 requests>=2.32.0
 gTTS>=2.5.4
 
-# Production server
+# Production servers
 gunicorn>=22.0.0
